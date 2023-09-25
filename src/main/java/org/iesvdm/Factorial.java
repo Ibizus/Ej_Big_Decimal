@@ -1,5 +1,6 @@
 package org.iesvdm;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /*
@@ -35,7 +36,15 @@ public class Factorial {
 
     public BigInteger calcula() {
         //TODO
-        return null;
+        BigInteger nuevo = BigInteger.valueOf(n);
+
+        for (int i = 1; i < n; i++)
+        {
+            nuevo = nuevo.multiply(BigInteger.valueOf(i));
+        }
+
+        setFactorial(nuevo);
+        return nuevo;
     }
 
 }
