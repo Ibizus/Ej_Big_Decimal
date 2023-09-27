@@ -77,7 +77,7 @@ public class Posicion {
         BigDecimal c = new BigDecimal("2").
                 multiply(BigDecimal.valueOf(Math.atan2
                 (a.sqrt(MathContext.DECIMAL128).doubleValue(),
-                new BigDecimal("1").subtract(a, MathContext.DECIMAL128).sqrt(MathContext.DECIMAL128).doubleValue())));
+                (new BigDecimal("1").subtract(a, MathContext.DECIMAL128)).sqrt(MathContext.DECIMAL128).doubleValue())));
 
         // d = R · c
         BigDecimal d = new BigDecimal("6378").multiply(c, MathContext.DECIMAL128);
