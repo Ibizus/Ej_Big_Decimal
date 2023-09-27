@@ -59,14 +59,15 @@ public class Posicion {
         BigDecimal dif_Long = enRadianes(destino.getLongitud()).subtract(enRadianes(this.getLongitud()));
 
         // a = sin²(Δlat/2) + cos(lat1) · cos(lat2) · sin²(Δlong/2)
-
+        // DIVIDO LA FORMULA EN VARIABLES PEQUEÑAS PARA HACER LEGIBLE EL CALCULO:
         BigDecimal senoCuadradoDifLat = BigDecimal.valueOf(Math.sin(dif_Lat.doubleValue()/2)).pow(2);
-        BigDecimal cosenoLat1 = BigDecimal.valueOf(Math.cos(this.getLatitud().doubleValue()));
-        BigDecimal cosenoLat2 = BigDecimal.valueOf(Math.cos(destino.getLatitud().doubleValue()));
+        BigDecimal cosenoLat1 = BigDecimal.valueOf(Math.cos(enRadianes(this.getLatitud()).doubleValue()));
+        BigDecimal cosenoLat2 = BigDecimal.valueOf(Math.cos(enRadianes(destino.getLatitud()).doubleValue()));
         BigDecimal senoCuadradoDifLong = BigDecimal.valueOf(Math.sin(dif_Long.doubleValue()/2)).pow(2);;
 
         BigDecimal a = senoCuadradoDifLat.add(cosenoLat1.multiply(cosenoLat2.multiply(senoCuadradoDifLong)));
-        /*
+
+        /* OPERACIONES EN UNA LÍNEA (FUNCIONA OK)
         BigDecimal a = BigDecimal.valueOf((Math.sin(dif_Lat.divide(new BigDecimal("2"), RoundingMode.HALF_UP).doubleValue()))).pow(2)
                 .add((BigDecimal.valueOf(Math.cos(this.getLatitud().doubleValue())))
                 .multiply(BigDecimal.valueOf(Math.cos(destino.getLatitud().doubleValue())))
@@ -80,13 +81,15 @@ public class Posicion {
                 (new BigDecimal("1").subtract(a, MathContext.DECIMAL128)).sqrt(MathContext.DECIMAL128).doubleValue())));
 
         // d = R · c
-        BigDecimal d = new BigDecimal("6378").multiply(c, MathContext.DECIMAL128);
-        System.out.println(d + "km de distancia");
-        return d;
+        BigDecimal radioT = new BigDecimal("6378");
+        return radioT.multiply(c, MathContext.DECIMAL128);
     }
 
     private static BigDecimal enRadianes(BigDecimal coordenada)
     {
+        //BigDecimal resultado = coordenada.multiply(BigDecimal.valueOf(Math.PI/180));
+        //return resultado;
+
         BigDecimal pi = BigDecimal.valueOf(Math.PI);
         return coordenada.multiply(pi.divide(new BigDecimal("180"), MathContext.DECIMAL128));
     }
