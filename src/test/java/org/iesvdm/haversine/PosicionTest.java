@@ -17,11 +17,10 @@ public class PosicionTest {
         double lat2 = 37.176487d; // 648852.102473 rad
         double long2 = -3.597929d; // -62795.707303 rad
         BigDecimal expected = new BigDecimal("664.20");
+
         Posicion Igualada = new Posicion(BigDecimal.valueOf(lat1), BigDecimal.valueOf(long1));
         Posicion Granada = new Posicion(BigDecimal.valueOf(lat2), BigDecimal.valueOf(long2));
-
         BigDecimal distanciaEntrePosiciones = Igualada.distancia(Granada);
-        distanciaEntrePosiciones = distanciaEntrePosiciones.setScale(2, RoundingMode.HALF_UP);
 
         Assertions.assertEquals(expected, distanciaEntrePosiciones);
     }
