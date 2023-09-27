@@ -1,6 +1,8 @@
 package org.iesvdm.haversine;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 /*
  * Implementa el cálculo de la distancia entre 2 puntos en la tierra mediante la fórmula de Haversine
@@ -49,8 +51,43 @@ public class Posicion {
         this.longitud = longitud;
     }
 
-    public static BigDecimal distancia(Posicion destino)
+    public BigDecimal distancia(Posicion destino)
     {
-        return null;
+        // Δlat = lat2− lat1
+        // Δlong = long2− long1
+        BigDecimal dif_Lat = enRadianes(destino.getLatitud()).subtract(enRadianes(this.getLatitud()));
+        BigDecimal dif_Long = enRadianes(destino.getLongitud()).subtract(enRadianes(this.getLongitud()));
+
+        // a = sin²(Δlat/2) + cos(lat1) · cos(lat2) · sin²(Δlong/2)
+
+        BigDecimal senoCuadradoDifLat = BigDecimal.valueOf(Math.sin(dif_Lat.doubleValue()/2)).pow(2);
+        BigDecimal cosenoLat1 = BigDecimal.valueOf(Math.cos(this.getLatitud().doubleValue()));
+        BigDecimal cosenoLat2 = BigDecimal.valueOf(Math.cos(destino.getLatitud().doubleValue()));
+        BigDecimal senoCuadradoDifLong = BigDecimal.valueOf(Math.sin(dif_Long.doubleValue()/2)).pow(2);;
+
+        BigDecimal a = senoCuadradoDifLat.add(cosenoLat1.multiply(cosenoLat2.multiply(senoCuadradoDifLong)));
+        /*
+        BigDecimal a = BigDecimal.valueOf((Math.sin(dif_Lat.divide(new BigDecimal("2"), RoundingMode.HALF_UP).doubleValue()))).pow(2)
+                .add((BigDecimal.valueOf(Math.cos(this.getLatitud().doubleValue())))
+                .multiply(BigDecimal.valueOf(Math.cos(destino.getLatitud().doubleValue())))
+                .multiply((BigDecimal.valueOf(Math.sin(dif_Long.divide(new BigDecimal("2"), RoundingMode.HALF_UP).doubleValue()))).pow(2)));
+         */
+
+        // c = 2 · atan2(√a, √(1−a))
+        BigDecimal c = new BigDecimal("2").
+                multiply(BigDecimal.valueOf(Math.atan2
+                (a.sqrt(MathContext.DECIMAL128).doubleValue(),
+                new BigDecimal("1").subtract(a, MathContext.DECIMAL128).sqrt(MathContext.DECIMAL128).doubleValue())));
+
+        // d = R · c
+        BigDecimal d = new BigDecimal("6378").multiply(c, MathContext.DECIMAL128);
+        System.out.println(d + "km de distancia");
+        return d;
+    }
+
+    private static BigDecimal enRadianes(BigDecimal coordenada)
+    {
+        BigDecimal pi = BigDecimal.valueOf(Math.PI);
+        return coordenada.multiply(pi.divide(new BigDecimal("180"), MathContext.DECIMAL128));
     }
 }
