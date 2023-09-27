@@ -9,7 +9,7 @@ import java.math.RoundingMode;
  * Para ello tienes que portar esta implementación de C# a Java, utiliza BigDecimal para los cálculos
  * en vez de precisión en punto flotante, crea un test de prueba de funcionamiento.
  *
- *          R = radio de la Tierra (radio ecuatorial = 6378 km)
+            R = radio de la Tierra (radio ecuatorial = 6378 km)
             Δlat = lat2− lat1
             Δlong = long2− long1
             a = sin²(Δlat/2) + cos(lat1) · cos(lat2) · sin²(Δlong/2)
@@ -20,7 +20,6 @@ public class Posicion {
 
     private BigDecimal latitud;
     private BigDecimal longitud;
-
 
     public Posicion(BigDecimal latitud,BigDecimal longitud)
     {
